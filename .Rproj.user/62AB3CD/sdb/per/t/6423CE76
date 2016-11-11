@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Get deepcrawl data for a list of sites\n#'\n#' @param sites Vector of URLs to get data for\n#' @param api_key Account API key\n#' @param account_id Account ID number\n#'\n#' @return A dataframe with one row per site\n#' @export\n#'\n#' @examples\n#'\n#' sites <- c(\"http://www.independent.co.uk/voices/comment/the-loss-of-scottish-salmon-is-a-cultural-catastrophe-10158356.html\",\n#' \"http://www.wrs.co.uk/\", \"http://thecodeofgoodpractice.co.uk/wp-content/uploads/2015/02/cogp_overview.pdf\",\n#' \"http://www.bbc.co.uk/news/uk-scotland-scotland-business-35643363\",\n#' \"http://www.bbc.co.uk/news/uk-scotland-scotland-business-35379470\",\n#' \"http://www.dailymail.co.uk/health/article-205547/Salmon-health-alert.html\")\n#'\n#' df <- get_deepcrawl(sites)\n#' df\n#'\nget_reports_temp <- function(sites, api_key = 'b72OqnAniXHgLAjA8VHCUQ10UQ7EzE-I7eYNLqqWXlSAxYa2JU3AtvRAaIwVDt5kvZJW8Y9tQTjGoOPYb6mIzw', account_id = 424){\n\n  session_token <- create_session_token(user, api_key)\n  account_id    <- get_account_info(session_token)[[1]]$id\n  project_id    <- create_project('Auto-generated Project', sites, session_token, account_id)\n  crawl_id      <- create_crawl(session_token, account_id, project_id)\n\n  while (TRUE){\n    Sys.sleep(3)\n    crawls <- get_crawls_info(session_token, account_id, project_id)\n\n    if (crawls[purrr::map_int(crawls, 'id') == crawl_id][[1]]$status == 'finished'){\n      reports <- get_reports_info(session_token, account_id, project_id, crawl_id)\n      return(reports)\n    }\n  }\n\n\n}\n\n\n",
+    "created" : 1473344914809.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4281885847",
+    "id" : "6423CE76",
+    "lastKnownWriteTime" : 1473347934,
+    "last_content_update" : 1473347934118,
+    "path" : "~/Documents/APIs/deepcrawl/R/get_deepcrawl.R",
+    "project_path" : "R/get_deepcrawl.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
